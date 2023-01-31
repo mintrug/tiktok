@@ -21,6 +21,10 @@ function Content() {
             document.title = title
         else
             document.title = 'React App'
+
+        return () => {
+            document.title = 'React App'
+        }
     }, [title])
 
     useEffect(() => {
@@ -31,8 +35,7 @@ function Content() {
         window.addEventListener('scroll', handleScroll)
 
         return () => {
-            // window.removeEventListener('scroll', handleScroll)
-            console.log("Unmouting...")
+            window.removeEventListener('scroll', handleScroll)
         }
 
     }, [])
