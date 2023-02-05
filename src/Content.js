@@ -7,6 +7,9 @@ function Content() {
     const [title, setTitle] = useState('')
     const [posts, setPost] = useState([])
     const [showGoToTop, setShowGoToTop] = useState(false)
+    const [size, setSize] = useState(window.innerWidth)
+    const [time, setTime] = useState(180)
+    const [avatar, setAvatar] = useState()
 
     useEffect(() => {
         fetch(`https://jsonplaceholder.typicode.com/${type}`)
@@ -40,6 +43,36 @@ function Content() {
 
     }, [])
 
+    useEffect(() => {
+        const handleResize = () => {
+            setSize(window.innerWidth)
+        }
+    
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
+
+    useEffect(() => {
+        setInterval(() => {
+            setTime(prev => prev - 1)
+        }, 1000)
+    }, [])
+
+    const handleAvatar = (e) => {
+        const file = e.target.files[0]
+        file.preview = URL.createObjectURL(file)
+        setAvatar(file)
+    }
+
+    useEffect(() => {
+        return () => {
+            URL.revokeObjectURL(avatar && avatar.preview)
+        }
+    }, [avatar])
+    
     return (
         <div>
             {tabs.map(tab => (
@@ -57,8 +90,18 @@ function Content() {
 
             <input
                 value={title}
+                placeholder={size}
                 onChange={(e) => setTitle(e.target.value)}
             />
+
+            <h1>{time}</h1>
+
+            <input
+                type='file'
+                onChange={handleAvatar}
+            />
+
+            <img src={avatar && avatar.preview} alt='' width='80%'/>
 
             <ul>
                 {posts.map(post => (
