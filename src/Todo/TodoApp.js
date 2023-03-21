@@ -1,6 +1,7 @@
-import React, { useReducer, useRef } from "react"
+import React, { useReducer, useRef, useContext } from "react"
 import reducer, { initial } from "./Reducer"
 import { setJob, addJob, deleteJob } from "./Function"
+import { MyContext } from "./Context"
 
 function TodoApp() {
     const [state, dispatch] = useReducer(reducer, initial)
@@ -12,6 +13,8 @@ function TodoApp() {
         dispatch(setJob(''))
         inputRef.current.focus()
     }
+
+    const data = useContext(MyContext)
 
     return (
         <React.Fragment>
@@ -26,6 +29,7 @@ function TodoApp() {
                 }}
             />
             <button onClick={handleSubmit}>Add</button>
+            <button onClick={data.func}>{data.name}</button>
             <ul>
                 {jobs.map((job, index) => {
                     return (
